@@ -87,7 +87,7 @@ const App: React.FC = () => {
               </div>
               <input
                 type="text"
-                className="block w-full pl-12 pr-32 py-4 md:py-5 bg-white border border-slate-200 rounded-2xl text-lg shadow-lg shadow-slate-200/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all placeholder:text-slate-400"
+                className="block w-full pl-12 pr-32 py-4 md:py-5 bg-white border border-slate-200 rounded-2xl text-lg text-slate-900 shadow-lg shadow-slate-200/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all placeholder:text-slate-400"
                 placeholder="example.com or https://..."
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
