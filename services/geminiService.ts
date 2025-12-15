@@ -9,16 +9,17 @@ export const analyzeUrl = async (url: string): Promise<AnalysisResult> => {
   const model = "gemini-2.5-flash";
 
   const prompt = `
-    Analyze the safety and reputation of the following website/domain: "${url}".
+    Analyze the website "${url}" for safety, reputation, and content.
     
-    Provide a realistic safety assessment based on public knowledge of this domain. 
-    If the domain is a known legitimate business (e.g., google.com, amazon.com), rate it high.
-    If it looks like a phishing pattern, scam, or unknown low-trust site, rate it lower.
-    
-    Return the response in a strict JSON structure conforming to the schema.
-    Ensure "safetyScore" is between 0 and 100.
-    "riskLevel" should be one of: "Safe", "Caution", "High Risk", "Unknown".
-    "securityChecklist" should simulate checking for SSL, Malware Status, and Phishing Status based on general domain reputation.
+    1. Determine the Safety Score (0-100) and Risk Level (Safe, Caution, High Risk).
+    2. Provide a concise Summary (2-3 sentences) describing what the site does and its trustworthiness.
+    3. Categorize the site (e.g., E-commerce, News, Social, Phishing, Adult, Gambling).
+    4. Estimate "Popularity" (High Traffic, Moderate, Low/Niche, New/Unknown).
+    5. Estimate "Server Location" based on typical hosting for this type of domain (or "Global").
+    6. List Pros (Trust signals) and Cons (Risk signals).
+    7. Create a Security Checklist for: "SSL Certificate", "Malware Check", "Domain Age", "Phishing Lists". Status should be Active (Good) or Inactive/Unknown (Bad).
+
+    Return strict JSON.
   `;
 
   try {
@@ -73,9 +74,6 @@ export const analyzeUrl = async (url: string): Promise<AnalysisResult> => {
 
   } catch (error) {
     console.error("Gemini Analysis Failed:", error);
-    // Fallback/Mock response in case of API error to prevent app crash, 
-    // or re-throw if you want to show an error state.
-    // For this demo, we'll re-throw to be handled by the component.
     throw error;
   }
 };
