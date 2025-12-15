@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ReportCard from './components/ReportCard';
@@ -12,11 +12,12 @@ const App: React.FC = () => {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleAnalyze = useCallback(async () => {
-    if (!url.trim()) return;
+  // Reusable analysis function
+  const performAnalysis = async (targetUrl: string) => {
+    if (!targetUrl.trim()) return;
     
     // Basic validation
-    let cleanUrl = url.trim();
+    let cleanUrl = targetUrl.trim();
     if (!cleanUrl.startsWith('http')) {
       cleanUrl = 'https://' + cleanUrl;
     }
@@ -33,11 +34,31 @@ const App: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [url]);
+  };
+
+  // Check URL on mount for /p/ pattern
+  useEffect(() => {
+    const path = window.location.pathname;
+    // Check if path starts with /p/
+    if (path.startsWith('/p/')) {
+      // Extract URL part (remove leading /p/)
+      const rawUrl = path.substring(3);
+      if (rawUrl) {
+        // Decode in case browsers encode characters
+        const decodedUrl = decodeURIComponent(rawUrl);
+        setUrl(decodedUrl);
+        performAnalysis(decodedUrl);
+      }
+    }
+  }, []);
+
+  const handleAnalyzeClick = () => {
+    performAnalysis(url);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleAnalyze();
+      handleAnalyzeClick();
     }
   };
 
@@ -73,7 +94,7 @@ const App: React.FC = () => {
                 onKeyDown={handleKeyDown}
               />
               <button
-                onClick={handleAnalyze}
+                onClick={handleAnalyzeClick}
                 disabled={loading || !url}
                 className="absolute right-2 top-2 bottom-2 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-xl px-6 flex items-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
