@@ -24,6 +24,14 @@ export interface AnalysisResult {
   securityChecklist: SecurityDetail[];
 }
 
+export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+
+export interface SiteRecord extends AnalysisResult {
+  status: ApprovalStatus;
+  timestamp: number;
+  id: string; // usually the domain
+}
+
 export interface HistoryItem {
   url: string;
   timestamp: number;
