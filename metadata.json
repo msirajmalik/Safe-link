@@ -1,0 +1,5 @@
+{
+  "name": "SafeSurfer",
+  "description": "A modern, AI-powered website reputation and safety analyzer. Check URL safety ratings, content categorization, and trust metrics instantly.",
+  "requestFramePermissions": []
+}
